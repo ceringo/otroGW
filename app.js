@@ -53,7 +53,11 @@ const client = new Client({
       '--disable-gpu'
     ],
   },
-  authStrategy: new LocalAuth()
+  authStrategy: new LocalAuth(
+  {
+      dataPath:'D://.wwebjs_auth/'
+    }
+  )
 });
 
 client.on('message', msg => {
