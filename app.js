@@ -31,7 +31,18 @@ app.use(express.urlencoded({
 app.use(fileUpload({
   debug: false
 }));
-
+const SESSION_FILE_PATH = 'D://sessionnueva';
+const EXECUTABLE_PATH_1='C:/Program Files/Google/Chrome/Application/chrome.exe';
+const EXECUTABLE_PATH_2='C:/Program Files (x86)/Google/Chrome/Application/chrome.exe';
+let sessionCfg;
+//if (fs.existsSync(SESSION_FILE_PATH)) {
+ //   sessionCfg = require(SESSION_FILE_PATH);
+//}
+if(fs.existsSync(EXECUTABLE_PATH_1)){
+    executablePath=EXECUTABLE_PATH_1;
+}else{
+    executablePath=EXECUTABLE_PATH_2;
+}
 app.get('/', (req, res) => {
   res.sendFile('index.html', {
     root: __dirname
@@ -55,7 +66,8 @@ const client = new Client({
   },
   authStrategy: new LocalAuth(
   {
-      dataPath:'D://.wwebjs_auth/'
+     clientId: 'session1',
+    dataPath: 'D://sessionnueva'
     }
   )
 });
@@ -132,7 +144,11 @@ io.on('connection', function(socket) {
     console.log('QR RECEIVED', qr);
     qrcode.toDataURL(qr, (err, url) => {
       socket.emit('qr', url);
-      socket.emit('message', 'QR Code received, scan please!');
+       if (fs.existsSync(SESSION_FILE_PATH)) {
+        console.log("EXISTE");
+        socket.emit('message', 'EXISTE!');
+     }
+    //  socket.emit('message', 'QR Code received, scan please!');
     });
   });
 
